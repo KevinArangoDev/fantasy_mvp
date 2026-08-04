@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Fantasy Premier League</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; max-width: 400px; }
+        input { display: block; width: 100%; padding: 8px; margin-bottom: 12px; box-sizing: border-box; }
+        button { background-color: #37003c; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<h1>Crear cuenta</h1>
+<form th:action="@{/registro}" method="post">
+    <label>Nombre</label>
+    <input type="text" name="nombre" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Contraseña</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Registrarme</button>
+</form>
+</body>
+</html>
