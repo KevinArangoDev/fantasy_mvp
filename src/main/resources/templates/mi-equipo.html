@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi equipo - Fantasy Premier League</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #37003c; color: white; }
+    </style>
+</head>
+<body>
+<h1 th:text="${equipo.nombreDelEquipo}"></h1>
+<table>
+    <thead>
+    <tr>
+        <th>Jugador</th>
+        <th>Equipo real</th>
+        <th>Puntos</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ej : ${jugadoresDelEquipo}">
+        <td th:text="${ej.jugador.nombre}"></td>
+        <td th:text="${ej.jugador.equipo}"></td>
+        <td th:text="${ej.puntosObtenidos}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>>

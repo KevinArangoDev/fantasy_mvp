@@ -28,6 +28,12 @@
         <td th:text="${jugador.equipo}"></td>
         <td th:text="${jugador.posicion}"></td>
         <td th:text="${jugador.precio}"></td>
+        <td>
+            <form th:action="@{/fichar}" method="post">
+                <input type="hidden" name="jugadorId" th:value="${jugador.id}">
+                <button type="submit">Fichar</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
