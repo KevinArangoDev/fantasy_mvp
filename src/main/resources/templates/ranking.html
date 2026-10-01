@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ranking - Fantasy Premier League</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #37003c; color: white; }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragmentos :: menu}"></div>
+<h1>Ranking general</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Posición</th>
+        <th>Equipo</th>
+        <th>Puntos totales</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entrada, iterStat : ${ranking}">
+        <td th:text="${iterStat.index + 1}"></td>
+        <td th:text="${entrada.key.nombreDelEquipo}"></td>
+        <td th:text="${entrada.value}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

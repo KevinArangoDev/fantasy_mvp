@@ -9,10 +9,12 @@
                 <a th:href="@{/mi-equipo}" style="color: white; margin-right: 20px; text-decoration: none;">Mi Equipo</a>
                 <a th:href="@{/logout}" style="color: white; text-decoration: none;">Cerrar sesión</a>
             </span>
+      <a th:href="@{/ranking}" style="color: white; margin-right: 20px; text-decoration: none;">Ranking</a>
 
     <span th:unless="${session.usuarioId != null}">
                 <a th:href="@{/login}" style="color: white; text-decoration: none;">Iniciar sesión</a>
             </span>
+
   </nav>
 </div>
 </body>
