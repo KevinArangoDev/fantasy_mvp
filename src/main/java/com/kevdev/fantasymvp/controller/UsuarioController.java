@@ -55,4 +55,9 @@ public class UsuarioController {
             return "redirect:/login?error";
         }
     }
+    @GetMapping("/logout")
+    public String cerrarSesion(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 }

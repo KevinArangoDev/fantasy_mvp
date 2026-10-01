@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="menu">
+  <nav style="background-color: #37003c; padding: 15px; margin-bottom: 20px;">
+    <a th:href="@{/jugadores}" style="color: white; margin-right: 20px; text-decoration: none;">Jugadores</a>
+
+    <span th:if="${session.usuarioId != null}">
+                <a th:href="@{/mi-equipo}" style="color: white; margin-right: 20px; text-decoration: none;">Mi Equipo</a>
+                <a th:href="@{/logout}" style="color: white; text-decoration: none;">Cerrar sesión</a>
+            </span>
+
+    <span th:unless="${session.usuarioId != null}">
+                <a th:href="@{/login}" style="color: white; text-decoration: none;">Iniciar sesión</a>
+            </span>
+  </nav>
+</div>
+</body>
+</html>

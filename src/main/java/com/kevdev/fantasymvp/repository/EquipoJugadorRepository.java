@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface EquipoJugadorRepository extends JpaRepository<EquipoJugador, Long> {
     List<EquipoJugador> findByEquipoUsuarioId(Long equipoUsuarioId);
+    List<EquipoJugador> findByJugadorId(Long jugadorId);
 }

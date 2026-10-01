@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Registrar puntos</title>
+</head>
+<body>
+<div th:replace="~{fragmentos :: menu}"></div>
+<h1>Registrar desempeño de jugador</h1>
+
+<form th:action="@{/admin/puntos}" method="post">
+    <label>Jugador</label>
+    <select name="jugadorId" required>
+        <option th:each="jugador : ${jugadores}"
+                th:value="${jugador.id}"
+                th:text="${jugador.nombre} + ' (' + ${jugador.posicion} + ')'"></option>
+    </select>
+
+    <label>Goles</label>
+    <input type="number" name="goles" value="0" min="0" required>
+
+    <label>Asistencias</label>
+    <input type="number" name="asistencias" value="0" min="0" required>
+
+    <label>Tarjetas amarillas</label>
+    <input type="number" name="tarjetasAmarillas" value="0" min="0" required>
+
+    <label>
+        <input type="checkbox" name="porteriaEnCero" value="true">
+        Portería en cero (solo defensas/porteros)
+    </label>
+
+    <button type="submit">Registrar puntos</button>
+</form>
+</body>
+</html>
