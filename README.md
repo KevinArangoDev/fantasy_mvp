@@ -66,12 +66,6 @@ Aplicación web de **Fantasy Premier League** donde los usuarios se registran, a
 | Gol | [completar] |
 | Asistencia | [completar] |
 
-## 🧠 Lo que aprendí
-
-- Arquitectura por capas con Spring Boot (controlador, servicio y repositorio)
-- Manejo de sesiones y control de acceso en vistas con Thymeleaf
-- Modelado de datos y persistencia con JPA y MySQL
-- Control de versiones con commits pequeños e incrementales
 
 ## 👤 Autor
 
