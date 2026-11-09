@@ -38,6 +38,10 @@ public class SincronizadorPuntosService {
 
     @Transactional
     public ResumenSincronizacion sincronizar(boolean soloLineaBase) {
+        if (!soloLineaBase && !jugadorRepository.existsByGolesSincronizadosIsNotNull()) {
+            throw new IllegalStateException(
+                    "No hay línea base. Ejecuta primero la sincronización con lineaBase=true.");
+        }
         RespuestaGoleadores respuesta = restClient.get()
                 .uri("/competitions/PL/scorers?limit=500")
                 .retrieve()

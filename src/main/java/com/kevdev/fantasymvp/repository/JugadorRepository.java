@@ -15,4 +15,6 @@ public interface JugadorRepository extends JpaRepository<Jugador, Long> {
 
     @Query("SELECT DISTINCT j.equipo FROM Jugador j ORDER BY j.equipo")
     List<String> listarEquipos();
+
+    boolean existsByGolesSincronizadosIsNotNull();
 }
