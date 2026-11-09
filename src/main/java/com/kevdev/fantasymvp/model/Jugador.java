@@ -16,6 +16,8 @@ public class Jugador {
     private String equipo;
     private String posicion;
     private Integer precio;
+    private Integer golesSincronizados;
+    private Integer asistenciasSincronizadas;
 
     // Constructor vacío (obligatorio para JPA)
     public Jugador() {}
@@ -38,4 +40,10 @@ public class Jugador {
     //Getter y setter para obtener los ID de los jugadores de la IP no de mi app
     public Long getApiId() { return apiId; }
     public void setApiId(Long apiId) { this.apiId = apiId; }
+
+    public Integer getGolesSincronizados() { return golesSincronizados; }
+    public void setGolesSincronizados(Integer v) { this.golesSincronizados = v; }
+
+    public Integer getAsistenciasSincronizadas() { return asistenciasSincronizadas; }
+    public void setAsistenciasSincronizadas(Integer v) { this.asistenciasSincronizadas = v; }
 }

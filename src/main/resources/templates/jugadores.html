@@ -14,6 +14,22 @@
 <body>
 <div th:replace="~{fragmentos :: menu}"></div>
 <h1>Jugadores disponibles</h1>
+<form th:action="@{/jugadores}" method="get" style="margin-bottom: 20px;">
+    <select name="equipo">
+        <option value="">Todos los equipos</option>
+        <option th:each="e : ${equipos}" th:value="${e}" th:text="${e}"
+                th:selected="${e == equipoSeleccionado}"></option>
+    </select>
+
+    <select name="posicion">
+        <option value="">Todas las posiciones</option>
+        <option th:each="p : ${ {'Portero','Defensa','Mediocampista','Delantero'} }"
+                th:value="${p}" th:text="${p}"
+                th:selected="${p == posicionSeleccionada}"></option>
+    </select>
+
+    <button type="submit">Filtrar</button>
+</form>
 <table>
     <thead>
     <tr>
