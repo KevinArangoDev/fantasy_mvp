@@ -9,6 +9,9 @@ public class Jugador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private Long apiId;
+
     private String nombre;
     private String equipo;
     private String posicion;
@@ -31,4 +34,8 @@ public class Jugador {
 
     public Integer getPrecio() { return precio; }
     public void setPrecio(Integer precio) { this.precio = precio; }
+
+    //Getter y setter para obtener los ID de los jugadores de la IP no de mi app
+    public Long getApiId() { return apiId; }
+    public void setApiId(Long apiId) { this.apiId = apiId; }
 }
