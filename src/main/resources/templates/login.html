@@ -11,6 +11,8 @@
 </head>
 <body>
 <h1>Iniciar sesión</h1>
+<p th:if="${param.error}" style="color: red;">Email o contraseña incorrectos.</p>
+<p th:if="${param.logout}" style="color: green;">Cerraste sesión.</p>
 <form th:action="@{/login}" method="post">
     <label>Email</label>
     <input type="email" name="email" required>

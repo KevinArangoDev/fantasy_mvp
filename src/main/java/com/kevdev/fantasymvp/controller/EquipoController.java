@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @Controller
 public class EquipoController {
 
@@ -22,12 +24,12 @@ public class EquipoController {
     @Autowired
     private JugadorRepository jugadorRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @PostMapping("/fichar")
-    public String ficharJugador(@RequestParam Long jugadorId, HttpSession session) {
-        Long usuarioId = (Long) session.getAttribute("usuarioId");
-        if (usuarioId == null) {
-            return "redirect:/login";
-        }
+    public String ficharJugador(@RequestParam Long jugadorId, Principal principal) {
+        Long usuarioId = idDeUsuarioActual(principal);
 
         var equipo = equipoUsuarioRepository.findByUsuarioId(usuarioId);
         var jugador = jugadorRepository.findById(jugadorId).orElseThrow();
@@ -41,11 +43,8 @@ public class EquipoController {
     }
 
     @GetMapping("/mi-equipo")
-    public String verMiEquipo(HttpSession session, Model model) {
-        Long usuarioId = (Long) session.getAttribute("usuarioId");
-        if (usuarioId == null) {
-            return "redirect:/login";
-        }
+    public String verMiEquipo(Principal principal, Model model) {
+        Long usuarioId = idDeUsuarioActual(principal);
 
         var equipo = equipoUsuarioRepository.findByUsuarioId(usuarioId);
         var jugadoresDelEquipo = equipoJugadorRepository.findByEquipoUsuarioId(equipo.getId());
@@ -53,5 +52,9 @@ public class EquipoController {
         model.addAttribute("equipo", equipo);
         model.addAttribute("jugadoresDelEquipo", jugadoresDelEquipo);
         return "mi-equipo";
+    }
+
+    private Long idDeUsuarioActual(Principal principal) {
+        return usuarioRepository.findByEmail(principal.getName()).orElseThrow().getId();
     }
 }

@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <div th:fragment="menu">
-  <nav style="background-color: #37003c; padding: 15px; margin-bottom: 20px;">
-    <a th:href="@{/jugadores}" style="color: white; margin-right: 20px; text-decoration: none;">Jugadores</a>
+    <nav style="background-color: #37003c; padding: 15px; margin-bottom: 20px;">
+        <a th:href="@{/jugadores}" style="color: white; margin-right: 20px; text-decoration: none;">Jugadores</a>
+        <a th:href="@{/ranking}" style="color: white; margin-right: 20px; text-decoration: none;">Ranking</a>
 
-    <span th:if="${session.usuarioId != null}">
+        <span sec:authorize="isAuthenticated()">
                 <a th:href="@{/mi-equipo}" style="color: white; margin-right: 20px; text-decoration: none;">Mi Equipo</a>
-                <a th:href="@{/logout}" style="color: white; text-decoration: none;">Cerrar sesión</a>
+                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/puntos}"
+                   style="color: white; margin-right: 20px; text-decoration: none;">Admin</a>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit"
+                            style="background: none; border: none; color: white; cursor: pointer; font-size: 1em;">
+                        Cerrar sesión
+                    </button>
+                </form>
             </span>
-      <a th:href="@{/ranking}" style="color: white; margin-right: 20px; text-decoration: none;">Ranking</a>
 
-    <span th:unless="${session.usuarioId != null}">
-                <a th:href="@{/login}" style="color: white; text-decoration: none;">Iniciar sesión</a>
+        <span sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}" style="color: white; margin-right: 20px; text-decoration: none;">Iniciar sesión</a>
+                <a th:href="@{/registro}" style="color: white; text-decoration: none;">Registrarse</a>
             </span>
-
-  </nav>
+    </nav>
 </div>
 </body>
 </html>

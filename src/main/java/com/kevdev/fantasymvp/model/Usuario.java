@@ -11,6 +11,9 @@ public class Usuario {
     private Long id;
 
     private String nombre;
+    private String rol = "USER";
+
+
 
     @Column(unique = true)
     private String email;
@@ -30,4 +33,7 @@ public class Usuario {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 }
