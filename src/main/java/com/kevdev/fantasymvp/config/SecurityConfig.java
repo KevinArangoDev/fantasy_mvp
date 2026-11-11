@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/registro", "/ranking", "/error").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/jugadores", "/api/jugadores/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/jugadores", "/api/jugadores/**", "/api/ranking").permitAll()
                         .requestMatchers("/admin/**", "/api/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

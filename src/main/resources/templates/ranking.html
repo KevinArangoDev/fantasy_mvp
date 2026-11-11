@@ -22,10 +22,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="entrada, iterStat : ${ranking}">
-        <td th:text="${iterStat.index + 1}"></td>
-        <td th:text="${entrada.key.nombreDelEquipo}"></td>
-        <td th:text="${entrada.value}"></td>
+    <tr th:each="fila : ${ranking}">
+        <td th:text="${fila.posicion()}"></td>
+        <td th:text="${fila.equipo()}"></td>
+        <td th:text="${fila.puntos()}"></td>
     </tr>
     </tbody>
 </table>
