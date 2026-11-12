@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Mi panel - Fantasy Premier League</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #37003c; color: white; }
+        input { padding: 8px; width: 300px; }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragmentos :: menu}"></div>
+
+<h1>Mi panel</h1>
+<p>Sesión: <strong id="usuario">cargando...</strong></p>
+<p id="mensaje" style="color: #37003c; font-weight: bold;"></p>
+
+<h2 id="nombre-equipo">Mi equipo</h2>
+<table>
+    <thead><tr><th>Jugador</th><th>Equipo real</th><th>Posición</th><th>Puntos</th></tr></thead>
+    <tbody id="cuerpo-equipo"></tbody>
+</table>
+
+<h2>Fichar jugadores</h2>
+<input id="buscador" type="text" placeholder="Busca por nombre (mínimo 2 letras)">
+<ul id="resultados"></ul>
+
+<h2>Ranking</h2>
+<table>
+    <thead><tr><th>Posición</th><th>Equipo</th><th>Puntos</th></tr></thead>
+    <tbody id="cuerpo-ranking"></tbody>
+</table>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>l>
