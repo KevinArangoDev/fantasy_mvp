@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/registro", "/ranking", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/jugadores", "/api/jugadores/**", "/api/ranking").permitAll()
+                        .requestMatchers("/api/me", "/api/mi-equipo", "/api/equipo/**").authenticated()
                         .requestMatchers("/admin/**", "/api/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

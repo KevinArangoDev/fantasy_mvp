@@ -11,4 +11,5 @@ public interface EquipoJugadorRepository extends JpaRepository<EquipoJugador, Lo
     List<EquipoJugador> findByJugadorId(Long jugadorId);
     @Query("SELECT SUM(ej.puntosObtenidos) FROM EquipoJugador ej WHERE ej.equipoUsuario.id = :equipoId")
     Integer sumarPuntosPorEquipo(Long equipoId);
+    boolean existsByEquipoUsuarioIdAndJugadorId(Long equipoUsuarioId, Long jugadorId);
 }
