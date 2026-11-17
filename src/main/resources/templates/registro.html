@@ -11,15 +11,18 @@
 </head>
 <body>
 <h1>Crear cuenta</h1>
-<form th:action="@{/registro}" method="post">
+<form th:action="@{/registro}" th:object="${registroForm}" method="post">
     <label>Nombre</label>
-    <input type="text" name="nombre" required>
+    <input type="text" th:field="*{nombre}">
+    <p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" style="color: red;"></p>
 
     <label>Email</label>
-    <input type="email" name="email" required>
+    <input type="text" th:field="*{email}">
+    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></p>
 
-    <label>Contraseña</label>
-    <input type="password" name="password" required>
+    <label>Contraseña (mínimo 8 caracteres)</label>
+    <input type="password" th:field="*{password}">
+    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></p>
 
     <button type="submit">Registrarme</button>
 </form>

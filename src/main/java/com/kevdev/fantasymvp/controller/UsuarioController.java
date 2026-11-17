@@ -1,44 +1,44 @@
 package com.kevdev.fantasymvp.controller;
 
-import com.kevdev.fantasymvp.model.EquipoUsuario;
-import com.kevdev.fantasymvp.model.Usuario;
-import com.kevdev.fantasymvp.repository.EquipoUsuarioRepository;
-import com.kevdev.fantasymvp.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.kevdev.fantasymvp.dto.RegistroForm;
+import com.kevdev.fantasymvp.exception.EmailYaExistenteException;
+import com.kevdev.fantasymvp.service.RegistroService;
+import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final RegistroService registroService;
 
-    @Autowired
-    private EquipoUsuarioRepository equipoUsuarioRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UsuarioController(RegistroService registroService) {
+        this.registroService = registroService;
+    }
 
     @GetMapping("/registro")
-    public String mostrarFormularioRegistro() {
+    public String mostrarFormularioRegistro(Model model) {
+        model.addAttribute("registroForm", new RegistroForm());
         return "registro";
     }
 
     @PostMapping("/registro")
-    public String registrarUsuario(Usuario usuario) {
-        usuario.setId(null);
-        usuario.setRol("USER");
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        usuarioRepository.save(usuario);
-
-        EquipoUsuario equipo = new EquipoUsuario();
-        equipo.setUsuario(usuario);
-        equipo.setNombreDelEquipo(usuario.getNombre() + " FC");
-        equipoUsuarioRepository.save(equipo);
-
+    public String registrarUsuario(@Valid @ModelAttribute("registroForm") RegistroForm form,
+                                   BindingResult resultado) {
+        if (resultado.hasErrors()) {
+            return "registro";
+        }
+        try {
+            registroService.registrar(form);
+        } catch (EmailYaExistenteException | DataIntegrityViolationException e) {
+            resultado.rejectValue("email", "email.existente", "Ese email ya está registrado");
+            return "registro";
+        }
         return "redirect:/login";
     }
 
