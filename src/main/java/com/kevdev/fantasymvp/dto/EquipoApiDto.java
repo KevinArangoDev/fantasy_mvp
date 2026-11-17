@@ -7,9 +7,9 @@ public class EquipoApiDto {
     public record UsuarioActual(String nombre, String email, String rol) {}
 
     public record JugadorEnEquipo(Long jugadorId, String nombre, String equipoReal,
-                                  String posicion, int puntos) {}
+                                  String posicion, int precio, int puntos) {}
 
-    public record MiEquipo(String nombreDelEquipo, int puntosTotales,
+    public record MiEquipo(String nombreDelEquipo, int puntosTotales, int presupuestoRestante,
                            List<JugadorEnEquipo> jugadores) {}
 
     public record FicharRequest(Long jugadorId) {}

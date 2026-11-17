@@ -1,11 +1,11 @@
 package com.kevdev.fantasymvp.controller;
 
 import com.kevdev.fantasymvp.dto.EquipoApiDto.*;
-import com.kevdev.fantasymvp.model.EquipoJugador;
 import com.kevdev.fantasymvp.model.EquipoUsuario;
-import com.kevdev.fantasymvp.model.Jugador;
 import com.kevdev.fantasymvp.model.Usuario;
-import com.kevdev.fantasymvp.repository.*;
+import com.kevdev.fantasymvp.repository.EquipoJugadorRepository;
+import com.kevdev.fantasymvp.repository.UsuarioRepository;
+import com.kevdev.fantasymvp.service.FichajeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +17,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class EquipoRestController {
 
+    private final FichajeService fichajeService;
     private final UsuarioRepository usuarioRepository;
-    private final EquipoUsuarioRepository equipoUsuarioRepository;
     private final EquipoJugadorRepository equipoJugadorRepository;
-    private final JugadorRepository jugadorRepository;
 
-    public EquipoRestController(UsuarioRepository usuarioRepository,
-                                EquipoUsuarioRepository equipoUsuarioRepository,
-                                EquipoJugadorRepository equipoJugadorRepository,
-                                JugadorRepository jugadorRepository) {
+    public EquipoRestController(FichajeService fichajeService,
+                                UsuarioRepository usuarioRepository,
+                                EquipoJugadorRepository equipoJugadorRepository) {
+        this.fichajeService = fichajeService;
         this.usuarioRepository = usuarioRepository;
-        this.equipoUsuarioRepository = equipoUsuarioRepository;
         this.equipoJugadorRepository = equipoJugadorRepository;
-        this.jugadorRepository = jugadorRepository;
     }
 
     @GetMapping("/me")
@@ -40,46 +37,38 @@ public class EquipoRestController {
 
     @GetMapping("/mi-equipo")
     public MiEquipo miEquipo(Principal principal) {
-        return construir(equipoDe(principal));
+        return construir(fichajeService.equipoDe(principal.getName()));
     }
 
     @PostMapping("/equipo/fichar")
     public ResponseEntity<MiEquipo> fichar(@RequestBody FicharRequest peticion, Principal principal) {
-        EquipoUsuario equipo = equipoDe(principal);
-
-        Jugador jugador = jugadorRepository.findById(peticion.jugadorId()).orElse(null);
-        if (jugador == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if (equipoJugadorRepository.existsByEquipoUsuarioIdAndJugadorId(equipo.getId(), jugador.getId())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
-        EquipoJugador fila = new EquipoJugador();
-        fila.setEquipoUsuario(equipo);
-        fila.setJugador(jugador);
-        equipoJugadorRepository.save(fila);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(construir(equipo));
+        fichajeService.fichar(principal.getName(), peticion.jugadorId());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(construir(fichajeService.equipoDe(principal.getName())));
     }
 
-    private EquipoUsuario equipoDe(Principal principal) {
-        Usuario u = usuarioRepository.findByEmail(principal.getName()).orElseThrow();
-        return equipoUsuarioRepository.findByUsuarioId(u.getId());
+    @DeleteMapping("/equipo/jugadores/{jugadorId}")
+    public MiEquipo vender(@PathVariable Long jugadorId, Principal principal) {
+        fichajeService.vender(principal.getName(), jugadorId);
+        return construir(fichajeService.equipoDe(principal.getName()));
     }
 
     private MiEquipo construir(EquipoUsuario equipo) {
         List<JugadorEnEquipo> jugadores = equipoJugadorRepository
-                .findByEquipoUsuarioId(equipo.getId()).stream()
+                .findByEquipoUsuarioIdAndActivoTrue(equipo.getId()).stream()
                 .map(ej -> new JugadorEnEquipo(
                         ej.getJugador().getId(),
                         ej.getJugador().getNombre(),
                         ej.getJugador().getEquipo(),
                         ej.getJugador().getPosicion(),
+                        FichajeService.precioDe(ej.getJugador()),
                         ej.getPuntosObtenidos()))
                 .toList();
 
-        int total = jugadores.stream().mapToInt(JugadorEnEquipo::puntos).sum();
-        return new MiEquipo(equipo.getNombreDelEquipo(), total, jugadores);
+        Integer total = equipoJugadorRepository.sumarPuntosPorEquipo(equipo.getId());
+        return new MiEquipo(equipo.getNombreDelEquipo(),
+                total != null ? total : 0,
+                fichajeService.presupuestoRestante(equipo),
+                jugadores);
     }
 }

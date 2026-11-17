@@ -23,13 +23,22 @@ async function cargarUsuario() {
 async function cargarEquipo() {
     const equipo = await pedirJson('/api/mi-equipo');
     document.getElementById('nombre-equipo').textContent =
-        equipo.nombreDelEquipo + ' - ' + equipo.puntosTotales + ' puntos';
+        equipo.nombreDelEquipo + ' - ' + equipo.puntosTotales + ' puntos - presupuesto restante: '
+        + equipo.presupuestoRestante;
 
     const cuerpo = document.getElementById('cuerpo-equipo');
     cuerpo.replaceChildren();
     for (const j of equipo.jugadores) {
         const fila = document.createElement('tr');
-        fila.append(celda(j.nombre), celda(j.equipoReal), celda(j.posicion), celda(j.puntos));
+
+        const tdAccion = document.createElement('td');
+        const boton = document.createElement('button');
+        boton.textContent = 'Vender';
+        boton.addEventListener('click', () => vender(j.jugadorId));
+        tdAccion.append(boton);
+
+        fila.append(celda(j.nombre), celda(j.equipoReal), celda(j.posicion),
+            celda(j.precio), celda(j.puntos), tdAccion);
         cuerpo.append(fila);
     }
 }
@@ -79,12 +88,25 @@ async function fichar(jugadorId) {
         mensaje.textContent = 'Jugador fichado';
         await cargarEquipo();
         await cargarRanking();
-    } else if (resp.status === 409) {
-        mensaje.textContent = 'Ya tienes a ese jugador';
-    } else if (resp.status === 404) {
-        mensaje.textContent = 'El jugador no existe';
     } else {
-        mensaje.textContent = 'Error inesperado (' + resp.status + ')';
+        const cuerpo = await resp.json().catch(() => null);
+        mensaje.textContent = cuerpo?.error ?? 'Error inesperado (' + resp.status + ')';
+    }
+}
+async function vender(jugadorId) {
+    const resp = await fetch('/api/equipo/jugadores/' + jugadorId, {
+        method: 'DELETE',
+        headers: { [csrfHeader]: csrfToken }
+    });
+
+    const mensaje = document.getElementById('mensaje');
+    if (resp.ok) {
+        mensaje.textContent = 'Jugador vendido';
+        await cargarEquipo();
+        await cargarRanking();
+    } else {
+        const cuerpo = await resp.json().catch(() => null);
+        mensaje.textContent = cuerpo?.error ?? 'Error inesperado (' + resp.status + ')';
     }
 }
 

@@ -17,7 +17,7 @@ public class EquipoJugador {
     @ManyToOne
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
-
+    private boolean activo = true;
     private Integer puntosObtenidos = 0;
 
     public EquipoJugador() {}
@@ -33,4 +33,7 @@ public class EquipoJugador {
 
     public Integer getPuntosObtenidos() { return puntosObtenidos; }
     public void setPuntosObtenidos(Integer puntosObtenidos) { this.puntosObtenidos = puntosObtenidos; }
+
+    public boolean isActivo() { return activo; }
+    public void setActivo(boolean activo) { this.activo = activo; }
 }

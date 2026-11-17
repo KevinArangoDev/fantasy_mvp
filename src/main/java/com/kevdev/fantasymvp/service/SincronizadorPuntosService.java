@@ -90,8 +90,7 @@ public class SincronizadorPuntosService {
 
             if (nuevosGoles > 0 || nuevasAsist > 0) {
                 int puntos = calculadoraPuntos.calcularPuntos(nuevosGoles, nuevasAsist, 0, false, jugador.getPosicion());
-                for (EquipoJugador ej : equipoJugadorRepository.findByJugadorId(jugador.getId())) {
-                    ej.setPuntosObtenidos(ej.getPuntosObtenidos() + puntos);
+                for (EquipoJugador ej : equipoJugadorRepository.findByJugadorIdAndActivoTrue(jugador.getId())) {                    ej.setPuntosObtenidos(ej.getPuntosObtenidos() + puntos);
                     equipoJugadorRepository.save(ej);
                     repartidos += puntos;
                 }

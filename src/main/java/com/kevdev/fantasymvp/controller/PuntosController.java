@@ -39,8 +39,7 @@ public class PuntosController {
 
         int puntos = calculadoraPuntos.calcularPuntos(goles, asistencias, tarjetasAmarillas, porteriaEnCero, jugador.getPosicion());
 
-        var equiposConEseJugador = equipoJugadorRepository.findByJugadorId(jugadorId);
-        for (var equipoJugador : equiposConEseJugador) {
+        var equiposConEseJugador = equipoJugadorRepository.findByJugadorIdAndActivoTrue(jugadorId);        for (var equipoJugador : equiposConEseJugador) {
             equipoJugador.setPuntosObtenidos(equipoJugador.getPuntosObtenidos() + puntos);
             equipoJugadorRepository.save(equipoJugador);
         }
