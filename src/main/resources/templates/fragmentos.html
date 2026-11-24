@@ -2,29 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-<div th:fragment="menu">
-    <nav style="background-color: #37003c; padding: 15px; margin-bottom: 20px;">
-        <a th:href="@{/jugadores}" style="color: white; margin-right: 20px; text-decoration: none;">Jugadores</a>
-        <a th:href="@{/ranking}" style="color: white; margin-right: 20px; text-decoration: none;">Ranking</a>
 
-        <span sec:authorize="isAuthenticated()">
-                <a th:href="@{/mi-equipo}" style="color: white; margin-right: 20px; text-decoration: none;">Mi Equipo</a>
-                <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/puntos}"
-                   style="color: white; margin-right: 20px; text-decoration: none;">Admin</a>
-                <form th:action="@{/logout}" method="post" style="display: inline;">
-                    <button type="submit"
-                            style="background: none; border: none; color: white; cursor: pointer; font-size: 1em;">
-                        Cerrar sesión
-                    </button>
-                </form>
-            </span>
+<header th:fragment="menu" class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" th:href="@{/jugadores}"><span class="brand-mark"></span>Fantasy PL</a>
 
-        <span sec:authorize="!isAuthenticated()">
-                <a th:href="@{/login}" style="color: white; margin-right: 20px; text-decoration: none;">Iniciar sesión</a>
-                <a th:href="@{/registro}" style="color: white; text-decoration: none;">Registrarse</a>
-                <a th:href="@{/app}" style="color: white; margin-right: 20px; text-decoration: none;">Panel</a>
-            </span>
-    </nav>
-</div>
+        <nav class="nav-links">
+            <a th:href="@{/jugadores}">Jugadores</a>
+            <a th:href="@{/ranking}">Ranking</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/app}">Panel</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/mi-equipo}">Mi equipo</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/puntos}">Admin</a>
+        </nav>
+
+        <div class="nav-right">
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-ghost btn-sm">Cerrar sesión</button>
+            </form>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-ghost btn-sm" th:href="@{/login}">Entrar</a>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-primary btn-sm" th:href="@{/registro}">Crear cuenta</a>
+        </div>
+    </div>
+</header>
+
+<span th:fragment="posicion(pos)" class="badge"
+      th:classappend="${pos == 'Portero'} ? 'badge-por' : (${pos == 'Defensa'} ? 'badge-def' : (${pos == 'Mediocampista'} ? 'badge-med' : 'badge-del'))"
+      th:text="${pos}"></span>
+
 </body>
 </html>

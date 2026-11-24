@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/jugadores", "/api/jugadores/**", "/api/ranking").permitAll()
                         .requestMatchers("/api/me", "/api/mi-equipo", "/api/equipo/**").authenticated()
                         .requestMatchers("/admin/**", "/api/**").hasRole("ADMIN")
+                        .requestMatchers("/", "/login", "/registro", "/ranking", "/error", "/js/**", "/css/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

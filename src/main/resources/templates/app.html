@@ -1,41 +1,71 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
-    <title>Mi panel - Fantasy Premier League</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #37003c; color: white; }
-        input { padding: 8px; width: 300px; }
-    </style>
+    <title>Mi panel · Fantasy Premier League</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragmentos :: menu}"></div>
 
-<h1>Mi panel</h1>
-<p>Sesión: <strong id="usuario">cargando...</strong></p>
-<p id="mensaje" style="color: #37003c; font-weight: bold;"></p>
+<main class="container">
+    <div class="page-header">
+        <h1 id="nombre-equipo">Mi panel</h1>
+        <p class="muted">Sesión: <span id="usuario">cargando...</span></p>
+    </div>
 
-<h2 id="nombre-equipo">Mi equipo</h2>
-<table>
-    <thead><tr><th>Jugador</th><th>Equipo real</th><th>Posición</th><th>Puntos</th></tr></thead>
-    <tbody id="cuerpo-equipo"></tbody>
-</table>
+    <p id="mensaje" class="msg" hidden></p>
 
-<h2>Fichar jugadores</h2>
-<input id="buscador" type="text" placeholder="Busca por nombre (mínimo 2 letras)">
-<ul id="resultados"></ul>
+    <section class="stats">
+        <div class="stat card">
+            <div class="stat-label">Puntos</div>
+            <div class="stat-value" id="stat-puntos">-</div>
+        </div>
+        <div class="stat card">
+            <div class="stat-label">Presupuesto restante</div>
+            <div class="stat-value" id="stat-presupuesto">-</div>
+        </div>
+        <div class="stat card">
+            <div class="stat-label">Jugadores</div>
+            <div class="stat-value" id="stat-jugadores">-</div>
+        </div>
+    </section>
 
-<h2>Ranking</h2>
-<table>
-    <thead><tr><th>Posición</th><th>Equipo</th><th>Puntos</th></tr></thead>
-    <tbody id="cuerpo-ranking"></tbody>
-</table>
+    <div class="card"><div class="pitch" id="pitch"></div></div>
+
+    <h2 class="section-title">Plantilla</h2>
+    <div class="card table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Jugador</th><th>Club</th><th>Posición</th>
+                <th class="num">Precio</th><th class="num">Puntos</th><th></th>
+            </tr>
+            </thead>
+            <tbody id="cuerpo-equipo"></tbody>
+        </table>
+    </div>
+
+    <h2 class="section-title">Fichar jugadores</h2>
+    <div class="card search">
+        <input id="buscador" type="text" placeholder="Busca por nombre (mínimo 2 letras)" autocomplete="off">
+        <ul id="resultados" class="results"></ul>
+    </div>
+
+    <h2 class="section-title">Ranking</h2>
+    <div class="card table-wrap">
+        <table>
+            <thead>
+            <tr><th class="num">#</th><th>Equipo</th><th class="num">Puntos</th></tr>
+            </thead>
+            <tbody id="cuerpo-ranking"></tbody>
+        </table>
+    </div>
+</main>
 
 <script th:src="@{/js/app.js}"></script>
 </body>
-</html>l>
+</html>

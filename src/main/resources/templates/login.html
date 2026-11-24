@@ -1,26 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Fantasy Premier League</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; max-width: 400px; }
-        input { display: block; width: 100%; padding: 8px; margin-bottom: 12px; box-sizing: border-box; }
-        button { background-color: #37003c; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Entrar · Fantasy Premier League</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
-<h1>Iniciar sesión</h1>
-<p th:if="${param.error}" style="color: red;">Email o contraseña incorrectos.</p>
-<p th:if="${param.logout}" style="color: green;">Cerraste sesión.</p>
-<form th:action="@{/login}" method="post">
-    <label>Email</label>
-    <input type="email" name="email" required>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <label>Contraseña</label>
-    <input type="password" name="password" required>
+<main class="container">
+    <div class="auth card">
+        <h1>Entrar</h1>
+        <p class="muted">Accede a tu equipo.</p>
 
-    <button type="submit">Entrar</button>
-</form>
+        <p th:if="${param.error}" class="msg msg-error">Email o contraseña incorrectos.</p>
+        <p th:if="${param.logout}" class="msg msg-ok">Cerraste sesión.</p>
+
+        <form th:action="@{/login}" method="post">
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" required autofocus>
+            </div>
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <input id="password" type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+        </form>
+
+        <p class="auth-alt">¿No tienes cuenta? <a th:href="@{/registro}">Crear cuenta</a></p>
+    </div>
+</main>
 </body>
 </html>

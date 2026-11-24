@@ -1,59 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Jugadores - Fantasy Premier League</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #37003c; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jugadores · Fantasy Premier League</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragmentos :: menu}"></div>
-<h1>Jugadores disponibles</h1>
-<p th:if="${error}" th:text="${error}" style="color: red;"></p>
-<form th:action="@{/jugadores}" method="get" style="margin-bottom: 20px;">
-    <select name="equipo">
-        <option value="">Todos los equipos</option>
-        <option th:each="e : ${equipos}" th:value="${e}" th:text="${e}"
-                th:selected="${e == equipoSeleccionado}"></option>
-    </select>
 
-    <select name="posicion">
-        <option value="">Todas las posiciones</option>
-        <option th:each="p : ${ {'Portero','Defensa','Mediocampista','Delantero'} }"
-                th:value="${p}" th:text="${p}"
-                th:selected="${p == posicionSeleccionada}"></option>
-    </select>
+<main class="container">
+    <div class="page-header">
+        <h1>Jugadores</h1>
+        <p class="muted" th:text="${#lists.size(jugadores)} + ' jugadores · filtra por club y posición'"></p>
+    </div>
 
-    <button type="submit">Filtrar</button>
-</form>
-<table>
-    <thead>
-    <tr>
-        <th>Nombre</th>
-        <th>Equipo</th>
-        <th>Posición</th>
-        <th>Precio</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="jugador : ${jugadores}">
-        <td th:text="${jugador.nombre}"></td>
-        <td th:text="${jugador.equipo}"></td>
-        <td th:text="${jugador.posicion}"></td>
-        <td th:text="${jugador.precio}"></td>
-        <td>
-            <form th:action="@{/fichar}" method="post">
-                <input type="hidden" name="jugadorId" th:value="${jugador.id}">
-                <button type="submit">Fichar</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <p th:if="${error}" th:text="${error}" class="msg msg-error"></p>
+
+    <form th:action="@{/jugadores}" method="get" class="filters card">
+        <select name="equipo" aria-label="Club">
+            <option value="">Todos los clubes</option>
+            <option th:each="e : ${equipos}" th:value="${e}" th:text="${e}"
+                    th:selected="${e == equipoSeleccionado}"></option>
+        </select>
+
+        <select name="posicion" aria-label="Posición">
+            <option value="">Todas las posiciones</option>
+            <option th:each="p : ${ {'Portero','Defensa','Mediocampista','Delantero'} }"
+                    th:value="${p}" th:text="${p}"
+                    th:selected="${p == posicionSeleccionada}"></option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a class="btn btn-ghost" th:href="@{/jugadores}">Limpiar</a>
+    </form>
+
+    <div class="card table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Jugador</th>
+                <th>Club</th>
+                <th>Posición</th>
+                <th class="num">Precio</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="jugador : ${jugadores}">
+                <td class="strong" th:text="${jugador.nombre}"></td>
+                <td class="muted" th:text="${jugador.equipo}"></td>
+                <td><span th:replace="~{fragmentos :: posicion(${jugador.posicion})}"></span></td>
+                <td class="num" th:text="${jugador.precio}"></td>
+                <td class="num">
+                    <form th:action="@{/fichar}" method="post">
+                        <input type="hidden" name="jugadorId" th:value="${jugador.id}">
+                        <button type="submit" class="btn btn-sm">Fichar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(jugadores)}">
+                <td colspan="5" class="empty">No hay jugadores con esos filtros.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 </body>
 </html>

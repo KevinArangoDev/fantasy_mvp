@@ -1,33 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Ranking - Fantasy Premier League</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #37003c; color: white; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ranking · Fantasy Premier League</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragmentos :: menu}"></div>
-<h1>Ranking general</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Posición</th>
-        <th>Equipo</th>
-        <th>Puntos totales</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="fila : ${ranking}">
-        <td th:text="${fila.posicion()}"></td>
-        <td th:text="${fila.equipo()}"></td>
-        <td th:text="${fila.puntos()}"></td>
-    </tr>
-    </tbody>
-</table>
+
+<main class="container">
+    <div class="page-header">
+        <h1>Ranking</h1>
+        <p class="muted">Puntos acumulados por equipo.</p>
+    </div>
+
+    <div class="card table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th class="num">#</th>
+                <th>Equipo</th>
+                <th class="num">Puntos</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fila : ${ranking}" th:classappend="${fila.posicion() == 1} ? 'top'">
+                <td class="num" th:text="${fila.posicion()}"></td>
+                <td class="strong" th:text="${fila.equipo()}"></td>
+                <td class="num strong" th:text="${fila.puntos()}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(ranking)}">
+                <td colspan="3" class="empty">Aún no hay equipos en el ranking.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 </body>
 </html>

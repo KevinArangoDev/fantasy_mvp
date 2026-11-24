@@ -1,56 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mi equipo - Fantasy Premier League</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background-color: #37003c; color: white; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mi equipo · Fantasy Premier League</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragmentos :: menu}"></div>
 
-<h1 th:text="${equipo.nombreDelEquipo}"></h1>
+<main class="container">
+    <div class="page-header">
+        <h1 th:text="${equipo.nombreDelEquipo}"></h1>
+        <p class="muted">Tu plantilla actual.</p>
+    </div>
 
-<p th:if="${exito}" th:text="${exito}" style="color: green;"></p>
-<p th:if="${error}" th:text="${error}" style="color: red;"></p>
+    <p th:if="${exito}" th:text="${exito}" class="msg msg-ok"></p>
+    <p th:if="${error}" th:text="${error}" class="msg msg-error"></p>
 
-<p>
-    Puntos totales: <strong th:text="${puntosTotales}"></strong> |
-    Presupuesto restante: <strong th:text="${presupuestoRestante}"></strong>
-    de <span th:text="${presupuestoTotal}"></span> |
-    Jugadores: <strong th:text="${#lists.size(jugadoresDelEquipo)}"></strong> / 15
-</p>
+    <section class="stats">
+        <div class="stat card">
+            <div class="stat-label">Puntos</div>
+            <div class="stat-value" th:text="${puntosTotales}"></div>
+        </div>
+        <div class="stat card">
+            <div class="stat-label">Presupuesto restante</div>
+            <div class="stat-value" th:text="${presupuestoRestante} + ' / ' + ${presupuestoTotal}"></div>
+        </div>
+        <div class="stat card">
+            <div class="stat-label">Jugadores</div>
+            <div class="stat-value" th:text="${#lists.size(jugadoresDelEquipo)} + ' / 15'"></div>
+        </div>
+    </section>
 
-<table>
-    <thead>
-    <tr>
-        <th>Jugador</th>
-        <th>Equipo real</th>
-        <th>Posición</th>
-        <th>Precio</th>
-        <th>Puntos</th>
-        <th>Acción</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="ej : ${jugadoresDelEquipo}">
-        <td th:text="${ej.jugador.nombre}"></td>
-        <td th:text="${ej.jugador.equipo}"></td>
-        <td th:text="${ej.jugador.posicion}"></td>
-        <td th:text="${ej.jugador.precio}"></td>
-        <td th:text="${ej.puntosObtenidos}"></td>
-        <td>
-            <form th:action="@{/vender}" method="post">
-                <input type="hidden" name="jugadorId" th:value="${ej.jugador.id}">
-                <button type="submit">Vender</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <div class="card table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Jugador</th>
+                <th>Club</th>
+                <th>Posición</th>
+                <th class="num">Precio</th>
+                <th class="num">Puntos</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ej : ${jugadoresDelEquipo}">
+                <td class="strong" th:text="${ej.jugador.nombre}"></td>
+                <td class="muted" th:text="${ej.jugador.equipo}"></td>
+                <td><span th:replace="~{fragmentos :: posicion(${ej.jugador.posicion})}"></span></td>
+                <td class="num" th:text="${ej.jugador.precio}"></td>
+                <td class="num strong" th:text="${ej.puntosObtenidos}"></td>
+                <td class="num">
+                    <form th:action="@{/vender}" method="post">
+                        <input type="hidden" name="jugadorId" th:value="${ej.jugador.id}">
+                        <button type="submit" class="btn btn-danger btn-sm">Vender</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(jugadoresDelEquipo)}">
+                <td colspan="6" class="empty">Todavía no tienes jugadores. Ficha a alguien desde <a th:href="@{/jugadores}">Jugadores</a>.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 </body>
-</html>>
+</html>

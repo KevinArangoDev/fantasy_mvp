@@ -1,36 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Registrar puntos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin · Registrar puntos</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:replace="~{fragmentos :: menu}"></div>
-<h1>Registrar desempeño de jugador</h1>
 
-<form th:action="@{/admin/puntos}" method="post">
-    <label>Jugador</label>
-    <select name="jugadorId" required>
-        <option th:each="jugador : ${jugadores}"
-                th:value="${jugador.id}"
-                th:text="${jugador.nombre} + ' (' + ${jugador.posicion} + ')'"></option>
-    </select>
+<main class="container">
+    <div class="page-header">
+        <h1>Registrar rendimiento</h1>
+        <p class="muted">Carga manual de tarjetas y portería en cero (los goles y asistencias se sincronizan solos).</p>
+    </div>
 
-    <label>Goles</label>
-    <input type="number" name="goles" value="0" min="0" required>
+    <form th:action="@{/admin/puntos}" method="post" class="card card-pad">
+        <div class="field">
+            <label for="jugadorId">Jugador</label>
+            <select id="jugadorId" name="jugadorId" required>
+                <option th:each="jugador : ${jugadores}"
+                        th:value="${jugador.id}"
+                        th:text="${jugador.nombre} + ' (' + ${jugador.posicion} + ')'"></option>
+            </select>
+        </div>
 
-    <label>Asistencias</label>
-    <input type="number" name="asistencias" value="0" min="0" required>
+        <div class="form-grid">
+            <div class="field">
+                <label for="goles">Goles</label>
+                <input id="goles" type="number" name="goles" value="0" min="0" required>
+            </div>
+            <div class="field">
+                <label for="asistencias">Asistencias</label>
+                <input id="asistencias" type="number" name="asistencias" value="0" min="0" required>
+            </div>
+            <div class="field">
+                <label for="tarjetasAmarillas">Tarjetas amarillas</label>
+                <input id="tarjetasAmarillas" type="number" name="tarjetasAmarillas" value="0" min="0" required>
+            </div>
+        </div>
 
-    <label>Tarjetas amarillas</label>
-    <input type="number" name="tarjetasAmarillas" value="0" min="0" required>
+        <label class="check">
+            <input type="checkbox" name="porteriaEnCero" value="true">
+            Portería en cero (solo defensas y porteros)
+        </label>
 
-    <label>
-        <input type="checkbox" name="porteriaEnCero" value="true">
-        Portería en cero (solo defensas/porteros)
-    </label>
-
-    <button type="submit">Registrar puntos</button>
-</form>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Registrar puntos</button>
+        </div>
+    </form>
+</main>
 </body>
 </html>

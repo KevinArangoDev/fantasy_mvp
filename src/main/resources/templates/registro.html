@@ -1,30 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registro - Fantasy Premier League</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; max-width: 400px; }
-        input { display: block; width: 100%; padding: 8px; margin-bottom: 12px; box-sizing: border-box; }
-        button { background-color: #37003c; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crear cuenta · Fantasy Premier League</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
-<h1>Crear cuenta</h1>
-<form th:action="@{/registro}" th:object="${registroForm}" method="post">
-    <label>Nombre</label>
-    <input type="text" th:field="*{nombre}">
-    <p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" style="color: red;"></p>
+<div th:replace="~{fragmentos :: menu}"></div>
 
-    <label>Email</label>
-    <input type="text" th:field="*{email}">
-    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></p>
+<main class="container">
+    <div class="auth card">
+        <h1>Crear cuenta</h1>
+        <p class="muted">Proyecto de demostración: usa datos de prueba.</p>
 
-    <label>Contraseña (mínimo 8 caracteres)</label>
-    <input type="password" th:field="*{password}">
-    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></p>
+        <form th:action="@{/registro}" th:object="${registroForm}" method="post">
+            <div class="field">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" type="text" th:field="*{nombre}">
+                <span class="field-error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+            </div>
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="text" th:field="*{email}">
+                <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+            <div class="field">
+                <label for="password">Contraseña (mínimo 8 caracteres)</label>
+                <input id="password" type="password" th:field="*{password}">
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Crear cuenta</button>
+        </form>
 
-    <button type="submit">Registrarme</button>
-</form>
+        <p class="auth-alt">¿Ya tienes cuenta? <a th:href="@{/login}">Entrar</a></p>
+    </div>
+</main>
 </body>
 </html>
