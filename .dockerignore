@@ -1,0 +1,6 @@
+target/
+.git/
+.idea/
+.env
+codigo-completo.txt
+src/main/resources/application.properties
